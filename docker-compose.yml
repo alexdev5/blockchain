@@ -1,0 +1,9 @@
+services:
+  blockchain:
+    build: .
+    container_name: karakai-blockchain
+    working_dir: /app
+    command: python src/main.py
+    # DEV
+    volumes:
+      - ./src:/app/src
