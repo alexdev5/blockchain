@@ -37,7 +37,7 @@ class KarakaiOleksandrBlock:
 
 class KarakaiOleksandrBlockchain:
     """
-    Скелет блокчейну + PoW відповідно до індивідуального завдання №1.
+    Скелет блокчейну
     """
 
     def __init__(self) -> None:
