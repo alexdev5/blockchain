@@ -1,7 +1,7 @@
 # src/demo.py
 from pprint import pprint
 
-from ./srs/config import PIP_FULL, SN, POW_LINEAR, POW_START_NONCE, POW_SUFFIX, POW_MAX_NONCE
+from config import PIP_FULL, SN, POW_LINEAR, POW_START_NONCE, POW_SUFFIX, POW_MAX_NONCE
 from blockchain import KarakaiOleksandrBlockchain
 
 
@@ -39,7 +39,3 @@ def run_task_1() -> None:
 
     print("Current chain:")
     pprint(bc.KarakaiOleksandr_dump_chain())
-
-
-if __name__ == "__main__":
-    run_demo()
