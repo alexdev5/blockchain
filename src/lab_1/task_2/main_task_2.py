@@ -98,4 +98,3 @@ def run_task_2() -> None:
     pprint(bc.KarakaiOleksandr_dump_balances())
 
     print("\nFinal mempool state:", bc.KarakaiOleksandr_dump_mempool())
-
