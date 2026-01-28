@@ -232,7 +232,6 @@ class KarakaiOleksandrBlockchain:
         return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
     def KarakaiOleksandr_is_pow_valid(self, block_hash: str) -> bool:
-        # Вимога: кінець хешу містить ваш місяць (MM="09")
         return block_hash.endswith(POW_SUFFIX)
 
     def KarakaiOleksandr_proof_of_work(
