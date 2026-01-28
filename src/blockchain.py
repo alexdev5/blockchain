@@ -90,10 +90,9 @@ class KarakaiOleksandrBlockchain:
             raise ValueError("Amount must be positive.")
 
         # Простий чек: баланс відправника має покривати amount (pending у мемпулі не враховуємо)
-        if self.KarakaiOleksandr_get_balance(sender) < amount:
-            raise ValueError(
-                f"Insufficient funds for mempool tx: {sender} has {self.KarakaiOleksandr_get_balance(sender)}"
-            )
+        effective = self.KarakaiOleksandr_get_effective_balance(sender)
+        if effective < amount:
+            raise ValueError(f"Insufficient funds for mempool tx: {sender} has {effective}")
 
         tx = KarakaiOleksandrTransaction(sender=sender, recipient=recipient, amount=float(amount))
         self.KarakaiOleksandr_mempool.append(tx)
@@ -325,3 +324,45 @@ class KarakaiOleksandrBlockchain:
 
     def KarakaiOleksandr_dump_balances(self) -> Dict[str, float]:
         return dict(sorted(self.KarakaiOleksandr_balances.items(), key=lambda x: x[0].lower()))
+    
+    def KarakaiOleksandr_get_effective_balance(self, address: str) -> float:
+        """
+        Баланс з урахуванням mempool:
+        confirmed_balance + pending_in - pending_out
+        (coinbase у mempool не буває, ми його туди не додаємо)
+        """
+        confirmed = self.KarakaiOleksandr_get_balance(address)
+        pending_in = 0.0
+        pending_out = 0.0
+
+        for tx in self.KarakaiOleksandr_mempool:
+            if tx.recipient == address:
+                pending_in += tx.amount
+            if tx.sender == address:
+                pending_out += tx.amount
+
+        return confirmed + pending_in - pending_out
+
+
+    def KarakaiOleksandr_new_transaction(self, sender: str, recipient: str, amount: float) -> int:
+        """
+        User-транзакція у мемпул.
+        Coinbase у мемпул не додаємо (вона додається автоматично під час майнінгу).
+        """
+        if sender == COINBASE_SENDER:
+            raise ValueError("Coinbase transaction is created automatically during mining.")
+
+        if amount <= 0:
+            raise ValueError("Amount must be positive.")
+
+        # Перевіряємо баланс з урахуванням pending транзакцій у mempool
+        effective_balance = self.KarakaiOleksandr_get_effective_balance(sender)
+        if effective_balance < amount:
+            raise ValueError(
+                f"Insufficient funds for mempool tx: {sender} has {effective_balance}"
+            )
+
+        tx = KarakaiOleksandrTransaction(sender=sender, recipient=recipient, amount=float(amount))
+        self.KarakaiOleksandr_mempool.append(tx)
+        return self.KarakaiOleksandr_last_block().index + 1
+

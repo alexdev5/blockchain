@@ -1,7 +1,9 @@
-# src/demo.py
 from pprint import pprint
 
-from config import PIP_FULL, SN, POW_LINEAR, POW_START_NONCE, POW_SUFFIX, POW_MAX_NONCE
+from config import (
+    PIP_FULL, SN, POW_LINEAR, POW_START_NONCE, POW_SUFFIX, POW_MAX_NONCE,
+    MINER_ADDRESS, USER_TX_AMOUNT
+)
 from blockchain import KarakaiOleksandrBlockchain
 
 
@@ -20,6 +22,10 @@ def run_task_1() -> None:
     print("Genesis block created.")
     pprint(bc.KarakaiOleksandr_dump_chain())
     print()
+
+    # спочатку "поповнюємо" Alice і Bob від майнера (coinbase вже дав майнеру баланс у генезисі)
+    bc.KarakaiOleksandr_new_transaction(MINER_ADDRESS, "Alice", USER_TX_AMOUNT)   # 13
+    bc.KarakaiOleksandr_new_transaction(MINER_ADDRESS, "Bob", USER_TX_AMOUNT)     # 13
 
     next_index = bc.KarakaiOleksandr_new_transaction("Alice", "Bob", 10)
     print(f"Added transaction -> will be included in block #{next_index}")
