@@ -3,7 +3,10 @@ services:
     build: .
     container_name: karakai-blockchain
     working_dir: /app
-    command: python src/main.py
+
+    ports:
+      - "5000:5000"
+
     # DEV
     volumes:
       - ./src:/app/src
