@@ -41,7 +41,7 @@ class KarakaiOleksandrBlock:
 
 class KarakaiOleksandrBlockchain:
     """
-    Завдання №1: скелет блокчейну + PoW (hash має закінчуватись на MM="09")
+    Завдання №1: скелет блокчейну + PoW
     Завдання №2: coinbase, нагорода, мемпул, баланси
     """
 
@@ -346,7 +346,6 @@ class KarakaiOleksandrBlockchain:
     def KarakaiOleksandr_new_transaction(self, sender: str, recipient: str, amount: float) -> int:
         """
         User-транзакція у мемпул.
-        Coinbase у мемпул не додаємо (вона додається автоматично під час майнінгу).
         """
         if sender == COINBASE_SENDER:
             raise ValueError("Coinbase transaction is created automatically during mining.")
