@@ -89,7 +89,6 @@ class KarakaiOleksandrBlockchain:
         if amount <= 0:
             raise ValueError("Amount must be positive.")
 
-        # Простий чек: баланс відправника має покривати amount (pending у мемпулі не враховуємо)
         effective = self.KarakaiOleksandr_get_effective_balance(sender)
         if effective < amount:
             raise ValueError(f"Insufficient funds for mempool tx: {sender} has {effective}")
